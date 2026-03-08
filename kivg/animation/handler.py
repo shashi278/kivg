@@ -7,10 +7,10 @@ and managing the animation lifecycle.
 
 from typing import List, Any, Optional, Callable
 
-from kivg.animation.kivy_animation import Animation
-from kivg.data_classes import AnimationContext
-from kivg.animation.animation_shapes import ShapeAnimator
-from kivg.constants import (
+from .kivy_animation import Animation
+from ..data_classes import AnimationContext
+from .animation_shapes import ShapeAnimator
+from ..constants import (
     DEFAULT_FILL_ANIMATION_DURATION,
     MESH_OPACITY_PROPERTY,
     DEFAULT_TRANSITION

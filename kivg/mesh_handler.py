@@ -9,7 +9,7 @@ from typing import List, Tuple, Any
 from kivy.graphics import Mesh as KivyMesh, Color
 from kivy.graphics.tesselator import Tesselator, WINDING_ODD, TYPE_POLYGONS
 
-from kivg.constants import TESSELATION_WINDING, TESSELATION_TYPE
+from .constants import TESSELATION_WINDING, TESSELATION_TYPE
 
 class MeshHandler:
     """
