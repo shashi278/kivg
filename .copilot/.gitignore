@@ -1,0 +1,9 @@
+# Agent working files (if needed)
+*.tmp
+*.log
+.agent_*
+
+# Keep all plan and agent files
+!plans/
+!agents/
+!*.md
