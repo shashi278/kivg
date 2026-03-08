@@ -9,7 +9,7 @@ from xml.dom import minidom
 from kivy.utils import get_color_from_hex
 
 from .constants import DEFAULT_FILL_COLOR
-from .exceptions import SVGParseError, SVGValidationError
+from .exceptions import SVGFileNotFoundError, SVGParseError, SVGValidationError
 
 
 def parse_svg(svg_file: str) -> Tuple[List[float], List[Tuple[str, str, List[float]]]]:
@@ -39,7 +39,7 @@ def parse_svg(svg_file: str) -> Tuple[List[float], List[Tuple[str, str, List[flo
     """
     # Validate file exists
     if not os.path.exists(svg_file):
-        raise SVGParseError(f"SVG file not found: {svg_file}")
+        raise SVGFileNotFoundError(f"SVG file not found: {svg_file}")
     
     # Parse XML
     try:
