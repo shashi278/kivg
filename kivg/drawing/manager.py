@@ -1,5 +1,8 @@
 """
 DrawingManager handles SVG path processing and rendering preparation.
+
+This module processes SVG files, extracts path data, and prepares it for
+rendering by setting up widget properties for lines and bezier curves.
 """
 
 from collections import OrderedDict
@@ -8,24 +11,44 @@ from typing import List, Tuple, Dict, Any, Optional
 from svg.path import parse_path
 from svg.path.path import Line, CubicBezier, Close, Move
 
-from ..animation.kivy_animation import Animation
-from ..path_utils import get_all_points, bezier_points, line_points
-from ..svg_parser import parse_svg
+from kivg.animation.kivy_animation import Animation
+from kivg.path_utils import get_all_points, bezier_points, line_points
+from kivg.svg_parser import parse_svg
+from kivg.constants import DEFAULT_LINE_WIDTH, DEFAULT_ANIMATION_DURATION
+from kivg.exceptions import SVGParseError
 
 
 class DrawingManager:
-    """Handles the drawing and rendering of SVG paths."""
+    """
+    Handles the drawing and rendering of SVG paths.
+    
+    This class processes SVG files, extracts path data, and sets up
+    widget properties for animated or static rendering of SVG elements.
+    """
     
     @staticmethod
-    def process_path_data(svg_file: str) -> Tuple[List[float], OrderedDict, List]:
+    def process_path_data(svg_file: str) -> Tuple[List[float], OrderedDict, List[Any]]:
         """
         Process SVG file and extract path data.
+        
+        Parses the SVG file and organizes paths by shape ID, tracking
+        closed paths for mesh generation and individual elements for drawing.
         
         Args:
             svg_file: Path to the SVG file
             
         Returns:
-            Tuple of (svg_dimensions, closed_shapes, path_elements)
+            Tuple containing:
+            - svg_dimensions: [width, height] from SVG viewBox
+            - closed_shapes: OrderedDict mapping shape IDs to their paths and metadata
+            - path_elements: Flat list of all path elements (Line, CubicBezier, etc.)
+            
+        Raises:
+            SVGParseError: If SVG file cannot be parsed
+            
+        Example:
+            >>> dims, shapes, elements = DrawingManager.process_path_data("icon.svg")
+            >>> print(f"SVG size: {dims}, Shapes: {len(shapes)}")
         """
         sw_size, path_strings = parse_svg(svg_file)
         
@@ -64,23 +87,33 @@ class DrawingManager:
         svg_size: List[float],
         svg_file: str,
         animate: bool = False,
-        line_width: int = 2,
-        duration: float = 0.02
+        line_width: int = DEFAULT_LINE_WIDTH,
+        duration: float = DEFAULT_ANIMATION_DURATION
     ) -> List[Animation]:
         """
         Calculate and set up path properties for rendering.
         
+        Processes all paths and sets widget properties for each line and bezier
+        curve. If animating, creates Animation objects for each element.
+        
         Args:
-            widget: Widget to draw on
-            closed_shapes: Path data organized by shape ID
-            svg_size: SVG dimensions [width, height]
-            svg_file: SVG file path
-            animate: Whether to animate the drawing
-            line_width: Width of the drawn lines
-            duration: Duration for each animation step
+            widget: Kivy widget to draw on (properties will be set on this widget)
+            closed_shapes: OrderedDict of path data organized by shape ID
+            svg_size: SVG dimensions [width, height] from viewBox
+            svg_file: Path to the SVG file
+            animate: If True, creates animations for drawing; if False, sets final values
+            line_width: Width of the drawn lines in pixels (default: 2)
+            duration: Duration for each animation step in seconds (default: 0.02)
             
         Returns:
-            List of Animation objects if animate=True
+            List of Animation objects if animate=True, empty list otherwise
+            
+        Example:
+            >>> anims = DrawingManager.calculate_paths(
+            ...     widget, shapes, [100, 100], "icon.svg", 
+            ...     animate=True, line_width=2, duration=0.02
+            ... )
+            >>> print(f"Created {len(anims)} animations")
         """
         line_count = 0
         bezier_count = 0
@@ -155,7 +188,19 @@ class DrawingManager:
     def _setup_line_properties(widget: Any, line_index: int, 
                               line_points: List[float], animate: bool, 
                               line_width: int) -> None:
-        """Set up line properties on the widget."""
+        """
+        Set up line properties on the widget for rendering.
+        
+        Sets widget attributes like line0_start_x, line0_end_y, etc.
+        If animating, starts from start point; if not, sets final values.
+        
+        Args:
+            widget: Widget to set properties on
+            line_index: Index of the line (0-based)
+            line_points: Line coordinates [x1, y1, x2, y2]
+            animate: If True, set initial animation state; if False, set final state
+            line_width: Width of the line in pixels
+        """
         setattr(widget, f"line{line_index}_start_x", line_points[0])
         setattr(widget, f"line{line_index}_start_y", line_points[1])
         setattr(
@@ -178,7 +223,19 @@ class DrawingManager:
     def _setup_bezier_properties(widget: Any, bezier_index: int, 
                                 bezier_points: List[float], animate: bool, 
                                 line_width: int) -> None:
-        """Set up bezier curve properties on the widget."""
+        """
+        Set up bezier curve properties on the widget for rendering.
+        
+        Sets widget attributes like bezier0_start_x, bezier0_control1_x, etc.
+        If animating, starts from start point; if not, sets final values.
+        
+        Args:
+            widget: Widget to set properties on
+            bezier_index: Index of the bezier curve (0-based)
+            bezier_points: Bezier coordinates [x1, y1, cx1, cy1, cx2, cy2, x2, y2]
+            animate: If True, set initial animation state; if False, set final state
+            line_width: Width of the curve in pixels
+        """
         # Start point
         setattr(widget, f"bezier{bezier_index}_start_x", bezier_points[0])
         setattr(widget, f"bezier{bezier_index}_start_y", bezier_points[1])
