@@ -2,24 +2,49 @@
 Shape-specific animation functionality for Kivg.
 """
 from kivg.animation.kivy_animation import Animation
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Any, Optional
 
 from kivg.data_classes import AnimationContext
 from ..path_utils import find_center, line_points, bezier_points
 from svg.path.path import Line, CubicBezier
 
 class ShapeAnimator:
-    """Handles creation and management of shape-specific animations."""
+    """
+    Handles creation and management of shape-specific animations.
+    
+    Provides functionality to animate individual shapes from different directions
+    (left, right, top, bottom, center) with customizable transitions and durations.
+    """
     
     @staticmethod
-    def setup_animation(caller, context: AnimationContext):
+    def setup_animation(caller: Any, context: AnimationContext) -> Optional[List[Animation]]:
         """
         Set up the animation for a given shape.
+        
+        Creates animations for all path elements (lines and beziers) within a shape,
+        animating them from a base point determined by the direction parameter.
+        
         Args:
-            caller: The widget calling the animation
-            context: AnimationContext containing animation parameters
+            caller: The widget or Kivg instance calling the animation
+            context: AnimationContext containing:
+                    - widget: Widget to animate
+                    - shape_id: ID of the shape to animate
+                    - direction: Animation direction (left/right/top/bottom/center_x/center_y/None)
+                    - transition: Transition type (e.g., "out_sine", "out_back")
+                    - duration: Duration in seconds
+                    - closed_shapes: SVG path data
+                    - sw_size: SVG dimensions
+                    - svg_file: SVG file path
+                    
         Returns:
-            List of Animation objects
+            List of Animation objects for each path element, or None if shape not found
+            
+        Example:
+            >>> context = AnimationContext(
+            ...     widget=widget, shape_id="icon", direction="left",
+            ...     transition="out_back", duration=0.5, ...
+            ... )
+            >>> anims = ShapeAnimator.setup_animation(kivg, context)
         """
 
         if context.shape_id not in context.closed_shapes:
@@ -33,7 +58,10 @@ class ShapeAnimator:
         anim_list = []
 
         # Extract path data and transform to animation format
-        path_data = ShapeAnimator._extract_path_data(context.widget, context.shape_id, context.closed_shapes, context.sw_size, context.svg_file)
+        path_data = ShapeAnimator._extract_path_data(
+            context.widget, context.shape_id, context.closed_shapes, 
+            context.sw_size, context.svg_file
+        )
         
         if not path_data:
             return None
@@ -65,9 +93,25 @@ class ShapeAnimator:
         return anim_list
     
     @staticmethod
-    def _extract_path_data(widget, shape_id: str, closed_shapes: Dict, 
-                          sw_size: Tuple[float, float], sf: str) -> List[List]:
-        """Extract and transform path data for animation."""
+    def _extract_path_data(widget: Any, shape_id: str, closed_shapes: Dict, 
+                          sw_size: Tuple[float, float], sf: str) -> List[List[Tuple[float, float]]]:
+        """
+        Extract and transform path data for animation.
+        
+        Converts SVG path elements into coordinate tuples suitable for animation setup.
+        
+        Args:
+            widget: Widget containing size and position
+            shape_id: ID of the shape to extract
+            closed_shapes: OrderedDict of all shapes from SVG
+            sw_size: SVG dimensions (width, height)
+            sf: SVG file path
+            
+        Returns:
+            Nested list of path elements as coordinate tuples:
+            Lines: [[start, end], ...]
+            Beziers: [[start, control1, control2, end], ...]
+        """
         result = []
         
         for path in closed_shapes[shape_id][shape_id + "paths"]:
@@ -101,10 +145,30 @@ class ShapeAnimator:
         return result
     
     @staticmethod
-    def _calculate_base_point(path_data: List[List], direction: str) -> float:
-        """Calculate the starting point for an animation based on direction."""
+    def _calculate_base_point(path_data: List[List[Tuple[float, float]]], 
+                             direction: Optional[str]) -> Optional[float]:
+        """
+        Calculate the starting point for an animation based on direction.
+        
+        Determines the base coordinate from which all path elements should
+        animate. For example, "left" means all elements start from the leftmost
+        point and animate to their final positions.
+        
+        Args:
+            path_data: Nested list of path elements with coordinate tuples
+            direction: Animation direction - one of:
+                      "left", "right", "top", "bottom", "center_x", "center_y", None
+            
+        Returns:
+            Base coordinate value (x or y depending on direction), or None if no direction
+            
+        Example:
+            >>> path_data = [[[( 10, 20), (50, 60)]]]  # One line
+            >>> base = ShapeAnimator._calculate_base_point(path_data, "left")
+            >>> # Returns 10 (leftmost x coordinate)
+        """
         if not direction:
-            return
+            return None
             
         coordinates = []
         
@@ -113,9 +177,9 @@ class ShapeAnimator:
             for element in path:
                 for point in element:
                     if direction in ("left", "right", "center_x"):
-                        coordinates.append(point[0])
+                        coordinates.append(point[0])  # X coordinates
                     else:
-                        coordinates.append(point[1])
+                        coordinates.append(point[1])  # Y coordinates
 
         # Determine base point based on direction
         if direction in ("top", "right"):
@@ -127,13 +191,31 @@ class ShapeAnimator:
         return
     
     @staticmethod
-    def _setup_line_animation(widget, shape_id: str, line_count: int, 
+    def _setup_line_animation(widget: Any, shape_id: str, line_count: int, 
                               line_points: List[Tuple[float, float]], 
-                              base_point: float, direction: str, 
-                              transition: str, duration: float):
-        """Set up animation for a line element."""
-        is_horizontal = direction in ("left", "right", "center_x")
-        is_vertical = direction in ("top", "bottom", "center_y")
+                              base_point: Optional[float], direction: Optional[str], 
+                              transition: str, duration: float) -> Animation:
+        """
+        Set up animation for a line element.
+        
+        Creates initial widget properties and Animation object for a line
+        that will animate from base_point to its final position.
+        
+        Args:
+            widget: Widget to set properties on
+            shape_id: ID of the shape (used as property prefix)
+            line_count: Index of this line within the shape
+            line_points: [(start_x, start_y), (end_x, end_y)]
+            base_point: Starting coordinate for animation (x or y value)
+            direction: Animation direction (determines which coordinate to animate)
+            transition: Kivy transition type (e.g., "out_sine", "out_back")
+            duration: Animation duration in seconds
+            
+        Returns:
+            Animation object for this line
+        """
+        is_horizontal = direction in ("left", "right", "center_x") if direction else False
+        is_vertical = direction in ("top", "bottom", "center_y") if direction else False
         start_point, end_point = line_points
         
         # Set initial property values

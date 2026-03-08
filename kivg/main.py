@@ -3,14 +3,23 @@ Kivg - SVG drawing and animation for Kivy
 Core class and main API
 """
 
+import os
 from collections import OrderedDict
-from typing import List, Tuple, Dict, Any, Callable
+from typing import List, Tuple, Dict, Any, Callable, Optional
 
 from kivg.animation.kivy_animation import Animation
 from kivg.drawing.manager import DrawingManager
 from kivg.animation.handler import AnimationHandler
 from kivg.mesh_handler import MeshHandler
 from kivg.svg_renderer import SvgRenderer
+from kivg.constants import (
+    DEFAULT_LINE_WIDTH,
+    DEFAULT_LINE_COLOR,
+    DEFAULT_ANIMATION_DURATION,
+    AnimationType,
+    MESH_OPACITY_PROPERTY
+)
+from kivg.exceptions import WidgetError
 
 
 class Kivg:
@@ -26,14 +35,26 @@ class Kivg:
         Initialize the Kivg renderer.
         
         Args:
-            widget: Kivy widget to draw SVG upon
+            widget: Kivy widget to draw SVG upon. Must have a 'canvas' attribute.
             *args: Additional arguments (not currently used)
+            
+        Raises:
+            WidgetError: If widget doesn't have required attributes
+            
+        Example:
+            >>> from kivy.uix.widget import Widget
+            >>> my_widget = Widget()
+            >>> kivg = Kivg(my_widget)
         """
+        # Validate widget
+        if not hasattr(widget, 'canvas'):
+            raise WidgetError("Widget must be a Kivy widget with 'canvas' attribute")
+        
         self.widget = widget  # Target widget for rendering
         self._fill = True  # Fill path with color after drawing
-        self._line_width = 2
-        self._line_color = [0, 0, 0, 1]
-        self._animation_duration = 0.02
+        self._line_width = DEFAULT_LINE_WIDTH
+        self._line_color = list(DEFAULT_LINE_COLOR)
+        self._animation_duration = DEFAULT_ANIMATION_DURATION
         self._previous_svg_file = ""  # Cache previous SVG file
         
         # Animation state
@@ -54,9 +75,14 @@ class Kivg:
         
         Args:
             shapes: List of shape point lists to fill
-            color: RGB or RGBA color to fill with
+            color: RGB or RGBA color to fill with [r, g, b, a]
+            
+        Example:
+            >>> shapes = [[0, 0, 100, 0, 100, 100, 0, 100]]
+            >>> color = [1.0, 0.0, 0.0, 1.0]  # Red
+            >>> kivg.fill_up(shapes, color)
         """
-        MeshHandler.render_mesh(self.widget, shapes, color, "mesh_opacity")
+        MeshHandler.render_mesh(self.widget, shapes, color, MESH_OPACITY_PROPERTY)
 
     def fill_up_shapes(self, *args) -> None:
         """Fill all shapes in the current SVG file."""
@@ -157,12 +183,12 @@ class Kivg:
             if animate:
                 # Combine animations according to anim_type
                 anim = AnimationHandler.create_animation_sequence(
-                    anim_list, sequential=(anim_type == "seq")
+                    anim_list, sequential=(anim_type == AnimationType.SEQUENTIAL.value)
                 )
                 
                 # Add fill animation if needed
                 if fill:
-                    setattr(self.widget, "mesh_opacity", 0)
+                    setattr(self.widget, MESH_OPACITY_PROPERTY, 0)
                     anim = AnimationHandler.add_fill_animation(
                         anim, self.widget, self.fill_up_shapes
                     )
