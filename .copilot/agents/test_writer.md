@@ -31,23 +31,24 @@ tests/
 ├── conftest.py              # Shared fixtures
 ├── unit/
 │   ├── __init__.py
-│   ├── test_constants.py
-│   ├── test_exceptions.py
-│   ├── test_svg_parser.py
-│   ├── test_path_utils.py
-│   ├── test_mesh_handler.py
-│   ├── test_svg_renderer.py
-│   └── test_main.py
+│   ├── test_data_classes.py    # ✅ 8 tests (100% coverage)
+│   ├── test_path_utils.py      # ✅ 47 tests (100% coverage)
+│   ├── test_svg_parser.py      # 📋 Planned
+│   ├── test_mesh_handler.py    # 📋 Planned
+│   ├── test_svg_renderer.py    # 📋 Planned
+│   └── test_main.py            # 📋 Planned
 ├── integration/
 │   ├── __init__.py
-│   ├── test_drawing_pipeline.py
-│   ├── test_animation_pipeline.py
-│   └── test_shape_animation.py
+│   ├── test_drawing_pipeline.py    # 📋 Planned
+│   ├── test_animation_pipeline.py  # 📋 Planned
+│   └── test_shape_animation.py     # 📋 Planned
 └── fixtures/
-    ├── simple.svg
-    ├── complex.svg
-    └── test_shapes.svg
+    └── sample_data/
 ```
+
+**Current Test Count**: 55 tests (8 + 47)  
+**Modules Completed**: 2/6 utility modules  
+**Overall Coverage**: ~15% (target: >80%)
 
 ## Test Writing Guidelines
 
@@ -157,11 +158,14 @@ def mock_kivy_modules(monkeypatch):
 
 ## Test Coverage Goals
 
-- **Overall**: >80% code coverage
+- **Overall**: >80% code coverage (current: ~15%)
 - **Critical modules**: >90% coverage
-  - `svg_parser.py`
-  - `main.py`
-  - `path_utils.py`
+  - `svg_parser.py` (0%)
+  - `main.py` (0%)
+  - `path_utils.py` ✅ (100%)
+- **Utility modules**: 100% coverage
+  - `data_classes.py` ✅ (100%)
+  - `path_utils.py` ✅ (100%)
 - **New code**: 100% coverage
 
 ## Test Categories

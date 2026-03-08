@@ -23,6 +23,28 @@ Now you can take some of the advantages svg offers, in your kivy apps. Those are
 pip install kivg
 ```
 
+## Development & Testing
+
+### Running Tests
+```bash
+# Run all tests
+pytest tests/
+
+# Run with coverage
+pytest --cov=kivg tests/
+
+# Run specific test module
+pytest tests/unit/test_path_utils.py -v
+```
+
+### Test Coverage
+- **Current**: 55 unit tests covering utility modules
+- **Status**: 
+  - ✅ `data_classes.py` - 8 tests (100% coverage)
+  - ✅ `path_utils.py` - 47 tests (100% coverage)
+  - 📋 More modules in progress
+
+
 ## Usage Guide
 
 Kivg helps you easily draw and animate SVG files in your Kivy applications.
