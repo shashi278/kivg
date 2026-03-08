@@ -2,28 +2,39 @@
 Path utilities for Kivg.
 Contains functions to convert SVG paths to Kivy-compatible coordinates.
 """
-from typing import Tuple, List, Union, Callable
+from typing import Tuple, List, Callable
 import math
+
 from svg.path.path import Line, CubicBezier
+
+from .constants import SPECIAL_ICON_KEYWORD, SPECIAL_ICON_SCALE_FACTOR, DEFAULT_BEZIER_SEGMENTS
+
 
 def transform_x(x_pos: float, widget_x: float, widget_width: float, 
                svg_width: float, svg_file: str) -> float:
     """
     Transform an X coordinate from SVG to Kivy coordinate system.
     
+    SVG coordinate system has origin at top-left, while Kivy has origin
+    at bottom-left. This function handles X-axis transformation.
+    
     Args:
         x_pos: SVG x coordinate
-        widget_x: Widget x position
-        widget_width: Widget width
-        svg_width: SVG width
-        svg_file: SVG file path (for special kivy icon handling)
+        widget_x: Widget x position in Kivy space
+        widget_width: Widget width in pixels
+        svg_width: SVG width from viewBox
+        svg_file: SVG file path (for special icon handling)
         
     Returns:
-        Transformed x coordinate
+        Transformed x coordinate in Kivy space
+        
+    Example:
+        >>> transform_x(50.0, 0.0, 256.0, 100.0, "icon.svg")
+        128.0
     """
     # Special handling for Kivy SVG icons
-    if "kivy" in svg_file:
-        return widget_x + (widget_width * (x_pos / 10) / svg_width)
+    if SPECIAL_ICON_KEYWORD in svg_file:
+        return widget_x + (widget_width * (x_pos / SPECIAL_ICON_SCALE_FACTOR) / svg_width)
     return widget_x + widget_width * x_pos / svg_width
 
 def transform_y(y_pos: float, widget_y: float, widget_height: float, 
@@ -31,19 +42,26 @@ def transform_y(y_pos: float, widget_y: float, widget_height: float,
     """
     Transform a Y coordinate from SVG to Kivy coordinate system.
     
+    SVG has Y+ pointing down, Kivy has Y+ pointing up. This function
+    handles the Y-axis transformation and flipping.
+    
     Args:
         y_pos: SVG y coordinate
-        widget_y: Widget y position
-        widget_height: Widget height
-        svg_height: SVG height
-        svg_file: SVG file path (for special kivy icon handling)
+        widget_y: Widget y position in Kivy space
+        widget_height: Widget height in pixels
+        svg_height: SVG height from viewBox
+        svg_file: SVG file path (for special icon handling)
         
     Returns:
-        Transformed y coordinate
+        Transformed y coordinate in Kivy space (flipped)
+        
+    Example:
+        >>> transform_y(25.0, 0.0, 100.0, 100.0, "icon.svg")
+        75.0
     """
     # Special handling for Kivy SVG icons
-    if "kivy" in svg_file:
-        return widget_y + (widget_height * (y_pos / 10) / svg_height)
+    if SPECIAL_ICON_KEYWORD in svg_file:
+        return widget_y + (widget_height * (y_pos / SPECIAL_ICON_SCALE_FACTOR) / svg_height)
     return widget_y + widget_height * (svg_height - y_pos) / svg_height
 
 def transform_point(complex_point: complex, widget_size: Tuple[float, float], 
@@ -128,15 +146,23 @@ def get_all_points(start: Tuple[float, float], control1: Tuple[float, float],
     """
     Generate discrete points along a cubic bezier curve.
     
+    Uses Bernstein polynomials to calculate points along the curve
+    for rendering as a series of line segments.
+    
     Args:
         start: Starting point (x, y)
         control1: First control point (x, y)
         control2: Second control point (x, y)
         end: End point (x, y)
-        segments: Number of segments to generate
+        segments: Number of segments to generate (default: 40)
     
     Returns:
         Flattened list of points [x1, y1, x2, y2, ...]
+        
+    Example:
+        >>> points = get_all_points((0, 0), (33, 66), (66, 33), (100, 100))
+        >>> len(points)
+        82  # 41 points * 2 coordinates
     """
     points = []
     ax, ay = start
