@@ -38,7 +38,7 @@ class MeshHandler:
         """
         tess = Tesselator()
         for shape in shapes:
-            if len(shape) >= 3:  # Minimum 3 coordinates (partial point)
+            if len(shape) >= 6:  # Minimum 3 points (6 coordinates) required
                 tess.add_contour(shape)
         return tess
         

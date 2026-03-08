@@ -2,7 +2,7 @@
 Shape-specific animation functionality for Kivg.
 """
 from kivg.animation.kivy_animation import Animation
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Any, Optional
 
 from kivg.data_classes import AnimationContext
 from ..path_utils import find_center, line_points, bezier_points

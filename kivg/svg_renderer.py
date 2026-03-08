@@ -10,11 +10,6 @@ from kivy.graphics import Line as KivyLine, Color
 from svg.path.path import Line, CubicBezier, Close, Move
 
 from .path_utils import get_all_points
-from .constants import (
-    LINE_PROPERTY_PATTERN,
-    BEZIER_PROPERTY_PATTERN,
-    WIDTH_SUFFIX
-)
 
 class SvgRenderer:
     """

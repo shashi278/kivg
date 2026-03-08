@@ -5,7 +5,8 @@ This module provides utilities for combining animations, adding fill effects,
 and managing the animation lifecycle.
 """
 
-from typing import List, Any, Optional, Callable
+from typing import List, Any, Optional, Callable, Dict
+from collections import OrderedDict
 
 from .kivy_animation import Animation
 from ..data_classes import AnimationContext
@@ -13,7 +14,7 @@ from .animation_shapes import ShapeAnimator
 from ..constants import (
     DEFAULT_FILL_ANIMATION_DURATION,
     MESH_OPACITY_PROPERTY,
-    DEFAULT_TRANSITION
+    DEFAULT_SHAPE_ANIM_TRANSITION as DEFAULT_TRANSITION
 )
 
 

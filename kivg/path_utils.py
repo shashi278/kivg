@@ -7,7 +7,7 @@ import math
 
 from svg.path.path import Line, CubicBezier
 
-from .constants import SPECIAL_ICON_KEYWORD, SPECIAL_ICON_SCALE_FACTOR, DEFAULT_BEZIER_SEGMENTS
+from .constants import SPECIAL_ICON_KEYWORD, SPECIAL_ICON_SCALE_FACTOR
 
 
 def transform_x(x_pos: float, widget_x: float, widget_width: float, 

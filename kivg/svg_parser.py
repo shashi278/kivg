@@ -45,7 +45,7 @@ def parse_svg(svg_file: str) -> Tuple[List[float], List[Tuple[str, str, List[flo
     try:
         doc = minidom.parse(svg_file)
     except Exception as e:
-        raise SVGParseError(f"Failed to parse SVG file '{svg_file}': {e}")
+        raise SVGParseError(f"Failed to parse SVG file '{svg_file}': {e}") from e
 
     # Extract viewBox
     svg_elements = doc.getElementsByTagName("svg")
@@ -90,10 +90,10 @@ def parse_svg(svg_file: str) -> Tuple[List[float], List[Tuple[str, str, List[flo
         # Parse fill color
         try:
             fill_attr = path.getAttribute("fill")
-            clr = get_color_from_hex(fill_attr) if fill_attr else DEFAULT_FILL_COLOR.copy()
+            clr = get_color_from_hex(fill_attr) if fill_attr else list(DEFAULT_FILL_COLOR)
         except ValueError:
             # Default if color format is unsupported (e.g., gradients)
-            clr = DEFAULT_FILL_COLOR.copy()
+            clr = list(DEFAULT_FILL_COLOR)
         
         path_strings.append((d, id_, clr))
         path_count += 1

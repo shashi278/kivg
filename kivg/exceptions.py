@@ -72,7 +72,7 @@ class WidgetError(KivgError):
     pass
 
 
-class FileNotFoundError(KivgError):
+class SVGFileNotFoundError(KivgError):
     """
     Raised when SVG file is not found.
     

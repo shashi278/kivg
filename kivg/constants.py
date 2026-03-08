@@ -5,7 +5,7 @@ This module centralizes all magic numbers and strings used throughout
 the codebase to improve maintainability and consistency.
 """
 from enum import Enum
-from typing import List
+from typing import List, Tuple
 
 from kivy.graphics.tesselator import WINDING_ODD, TYPE_POLYGONS
 
@@ -40,8 +40,8 @@ class AnimationTransition(Enum):
 
 # Default rendering values
 DEFAULT_LINE_WIDTH: int = 2
-DEFAULT_LINE_COLOR: List[float] = [0, 0, 0, 1]
-DEFAULT_FILL_COLOR: List[float] = [1, 1, 1, 0]  # Transparent white
+DEFAULT_LINE_COLOR: Tuple[float, float, float, float] = (0, 0, 0, 1)
+DEFAULT_FILL_COLOR: Tuple[float, float, float, float] = (1, 1, 1, 0)  # Transparent white
 DEFAULT_ANIMATION_DURATION: float = 0.02
 DEFAULT_FILL_ANIMATION_DURATION: float = 0.4
 

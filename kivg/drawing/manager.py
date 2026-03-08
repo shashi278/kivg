@@ -15,7 +15,6 @@ from ..animation.kivy_animation import Animation
 from ..path_utils import get_all_points, bezier_points, line_points
 from ..svg_parser import parse_svg
 from ..constants import DEFAULT_LINE_WIDTH, DEFAULT_ANIMATION_DURATION
-from ..exceptions import SVGParseError
 
 
 class DrawingManager:

@@ -53,7 +53,7 @@ class Kivg:
         self.widget = widget  # Target widget for rendering
         self._fill = True  # Fill path with color after drawing
         self._line_width = DEFAULT_LINE_WIDTH
-        self._line_color = DEFAULT_LINE_COLOR.copy()
+        self._line_color = list(DEFAULT_LINE_COLOR)
         self._animation_duration = DEFAULT_ANIMATION_DURATION
         self._previous_svg_file = ""  # Cache previous SVG file
         
