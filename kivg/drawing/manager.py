@@ -20,40 +20,40 @@ from ..constants import DEFAULT_LINE_WIDTH, DEFAULT_ANIMATION_DURATION
 class DrawingManager:
     """
     Handles the drawing and rendering of SVG paths.
-    
+
     This class processes SVG files, extracts path data, and sets up
     widget properties for animated or static rendering of SVG elements.
     """
-    
+
     @staticmethod
     def process_path_data(svg_file: str) -> Tuple[List[float], OrderedDict, List[Any]]:
         """
         Process SVG file and extract path data.
-        
+
         Parses the SVG file and organizes paths by shape ID, tracking
         closed paths for mesh generation and individual elements for drawing.
-        
+
         Args:
             svg_file: Path to the SVG file
-            
+
         Returns:
             Tuple containing:
             - svg_dimensions: [width, height] from SVG viewBox
             - closed_shapes: OrderedDict mapping shape IDs to their paths and metadata
             - path_elements: Flat list of all path elements (Line, CubicBezier, etc.)
-            
+
         Raises:
             SVGParseError: If SVG file cannot be parsed
-            
+
         Example:
             >>> dims, shapes, elements = DrawingManager.process_path_data("icon.svg")
             >>> print(f"SVG size: {dims}, Shapes: {len(shapes)}")
         """
         sw_size, path_strings = parse_svg(svg_file)
-        
+
         path = []
         closed_shapes = OrderedDict()
-        
+
         for path_string, id_, clr in path_strings:
             move_found = False
             tmp = []
@@ -61,7 +61,7 @@ class DrawingManager:
             closed_shapes[id_][id_ + "paths"] = []
             closed_shapes[id_][id_ + "shapes"] = []  # for drawing meshes
             closed_shapes[id_]["color"] = clr
-            
+
             _path = parse_path(path_string)
             for e in _path:
                 path.append(e)
@@ -76,7 +76,7 @@ class DrawingManager:
 
                 if not isinstance(e, Move) and move_found:
                     tmp.append(e)
-        
+
         return sw_size, closed_shapes, path
 
     @staticmethod
@@ -87,14 +87,14 @@ class DrawingManager:
         svg_file: str,
         animate: bool = False,
         line_width: int = DEFAULT_LINE_WIDTH,
-        duration: float = DEFAULT_ANIMATION_DURATION
+        duration: float = DEFAULT_ANIMATION_DURATION,
     ) -> List[Animation]:
         """
         Calculate and set up path properties for rendering.
-        
+
         Processes all paths and sets widget properties for each line and bezier
         curve. If animating, creates Animation objects for each element.
-        
+
         Args:
             widget: Kivy widget to draw on (properties will be set on this widget)
             closed_shapes: OrderedDict of path data organized by shape ID
@@ -103,13 +103,13 @@ class DrawingManager:
             animate: If True, creates animations for drawing; if False, sets final values
             line_width: Width of the drawn lines in pixels (default: 2)
             duration: Duration for each animation step in seconds (default: 0.02)
-            
+
         Returns:
             List of Animation objects if animate=True, empty list otherwise
-            
+
         Example:
             >>> anims = DrawingManager.calculate_paths(
-            ...     widget, shapes, [100, 100], "icon.svg", 
+            ...     widget, shapes, [100, 100], "icon.svg",
             ...     animate=True, line_width=2, duration=0.02
             ... )
             >>> print(f"Created {len(anims)} animations")
@@ -117,7 +117,7 @@ class DrawingManager:
         line_count = 0
         bezier_count = 0
         anim_list = []
-        
+
         for id_, closed_paths in closed_shapes.items():
             for s in closed_paths[id_ + "paths"]:
                 tmp = []
@@ -137,13 +137,13 @@ class DrawingManager:
                                     **{
                                         f"line{line_count}_end_x": lp[2],
                                         f"line{line_count}_end_y": lp[3],
-                                        f"line{line_count}_width": line_width
-                                    }
+                                        f"line{line_count}_width": line_width,
+                                    },
                                 )
                             )
                         line_count += 1
                         tmp.extend(lp)
-                        
+
                     elif isinstance(e, CubicBezier):
                         bp = bezier_points(
                             e, [*widget.size], [*widget.pos], [*svg_size], svg_file
@@ -163,8 +163,8 @@ class DrawingManager:
                                         f"bezier{bezier_count}_control2_y": bp[5],
                                         f"bezier{bezier_count}_end_x": bp[6],
                                         f"bezier{bezier_count}_end_y": bp[7],
-                                        f"bezier{bezier_count}_width": line_width
-                                    }
+                                        f"bezier{bezier_count}_width": line_width,
+                                    },
                                 )
                             )
                         bezier_count += 1
@@ -180,19 +180,23 @@ class DrawingManager:
 
                 if tmp not in closed_paths[id_ + "shapes"]:
                     closed_paths[id_ + "shapes"].append(tmp)
-        
+
         return anim_list
-    
+
     @staticmethod
-    def _setup_line_properties(widget: Any, line_index: int, 
-                              line_points: List[float], animate: bool, 
-                              line_width: int) -> None:
+    def _setup_line_properties(
+        widget: Any,
+        line_index: int,
+        line_points: List[float],
+        animate: bool,
+        line_width: int,
+    ) -> None:
         """
         Set up line properties on the widget for rendering.
-        
+
         Sets widget attributes like line0_start_x, line0_end_y, etc.
         If animating, starts from start point; if not, sets final values.
-        
+
         Args:
             widget: Widget to set properties on
             line_index: Index of the line (0-based)
@@ -217,17 +221,21 @@ class DrawingManager:
             f"line{line_index}_width",
             1 if animate else line_width,
         )
-    
+
     @staticmethod
-    def _setup_bezier_properties(widget: Any, bezier_index: int, 
-                                bezier_points: List[float], animate: bool, 
-                                line_width: int) -> None:
+    def _setup_bezier_properties(
+        widget: Any,
+        bezier_index: int,
+        bezier_points: List[float],
+        animate: bool,
+        line_width: int,
+    ) -> None:
         """
         Set up bezier curve properties on the widget for rendering.
-        
+
         Sets widget attributes like bezier0_start_x, bezier0_control1_x, etc.
         If animating, starts from start point; if not, sets final values.
-        
+
         Args:
             widget: Widget to set properties on
             bezier_index: Index of the bezier curve (0-based)
@@ -238,7 +246,7 @@ class DrawingManager:
         # Start point
         setattr(widget, f"bezier{bezier_index}_start_x", bezier_points[0])
         setattr(widget, f"bezier{bezier_index}_start_y", bezier_points[1])
-        
+
         # Control points
         setattr(
             widget,
@@ -260,7 +268,7 @@ class DrawingManager:
             f"bezier{bezier_index}_control2_y",
             bezier_points[1] if animate else bezier_points[5],
         )
-        
+
         # End point
         setattr(
             widget,
@@ -272,7 +280,7 @@ class DrawingManager:
             f"bezier{bezier_index}_end_y",
             bezier_points[1] if animate else bezier_points[7],
         )
-        
+
         # Width
         setattr(
             widget,

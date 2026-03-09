@@ -1,4 +1,5 @@
 """Shared pytest fixtures for Kivg tests."""
+
 import pytest
 from unittest.mock import Mock, MagicMock
 from typing import Tuple

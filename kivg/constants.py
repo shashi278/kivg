@@ -4,6 +4,7 @@ Constants and default values for Kivg library.
 This module centralizes all magic numbers and strings used throughout
 the codebase to improve maintainability and consistency.
 """
+
 from enum import Enum
 from typing import List, Tuple
 
@@ -12,12 +13,14 @@ from kivy.graphics.tesselator import WINDING_ODD, TYPE_POLYGONS
 
 class AnimationType(Enum):
     """Animation sequence types."""
+
     SEQUENTIAL = "seq"
     PARALLEL = "par"
 
 
 class AnimationDirection(Enum):
     """Directions for shape animations."""
+
     LEFT = "left"
     RIGHT = "right"
     TOP = "top"
@@ -29,6 +32,7 @@ class AnimationDirection(Enum):
 
 class AnimationTransition(Enum):
     """Common animation transition types."""
+
     OUT_SINE = "out_sine"
     OUT_BOUNCE = "out_bounce"
     OUT_ELASTIC = "out_elastic"
@@ -41,7 +45,12 @@ class AnimationTransition(Enum):
 # Default rendering values
 DEFAULT_LINE_WIDTH: int = 2
 DEFAULT_LINE_COLOR: Tuple[float, float, float, float] = (0, 0, 0, 1)
-DEFAULT_FILL_COLOR: Tuple[float, float, float, float] = (1, 1, 1, 0)  # Transparent white
+DEFAULT_FILL_COLOR: Tuple[float, float, float, float] = (
+    1,
+    1,
+    1,
+    0,
+)  # Transparent white
 DEFAULT_ANIMATION_DURATION: float = 0.02
 DEFAULT_FILL_ANIMATION_DURATION: float = 0.4
 
