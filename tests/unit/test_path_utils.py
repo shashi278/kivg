@@ -1,4 +1,5 @@
 """Unit tests for path_utils module."""
+
 import pytest
 import math
 from unittest.mock import Mock
@@ -10,7 +11,7 @@ from kivg.path_utils import (
     bezier_points,
     line_points,
     get_all_points,
-    find_center
+    find_center,
 )
 
 
@@ -49,7 +50,7 @@ class TestTransformX:
         """Test that 'kivy' anywhere in path triggers special handling."""
         result1 = transform_x(50.0, 0.0, 256.0, 100.0, "path/to/kivy/icon.svg")
         result2 = transform_x(50.0, 0.0, 256.0, 100.0, "my-kivy-file.svg")
-        
+
         expected = 0.0 + (256.0 * (50.0 / 10) / 100.0)
         assert result1 == expected
         assert result2 == expected
@@ -69,7 +70,7 @@ class TestTransformX:
         # Smaller SVG
         result1 = transform_x(25.0, 0.0, 256.0, 50.0, "test.svg")
         assert result1 == 128.0
-        
+
         # Larger SVG
         result2 = transform_x(100.0, 0.0, 256.0, 200.0, "test.svg")
         assert result2 == 128.0
@@ -116,7 +117,7 @@ class TestTransformY:
         # SVG has origin at top-left, Kivy at bottom-left
         y_top = transform_y(0.0, 0.0, 256.0, 100.0, "test.svg")
         y_bottom = transform_y(100.0, 0.0, 256.0, 100.0, "test.svg")
-        
+
         assert y_top > y_bottom  # Top of SVG = higher in Kivy
         assert y_top == 256.0
         assert y_bottom == 0.0
@@ -137,11 +138,11 @@ class TestTransformPoint:
         result = transform_point(
             point,
             (256.0, 256.0),  # widget_size
-            (0.0, 0.0),      # widget_pos
+            (0.0, 0.0),  # widget_pos
             (100.0, 100.0),  # svg_size
-            "test.svg"
+            "test.svg",
         )
-        
+
         assert isinstance(result, list)
         assert len(result) == 2
         assert result[0] == 128.0  # X at center
@@ -150,32 +151,40 @@ class TestTransformPoint:
     def test_origin_point(self):
         """Test transforming origin point (0, 0)."""
         point = complex(0.0, 0.0)
-        result = transform_point(point, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg")
-        
+        result = transform_point(
+            point, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg"
+        )
+
         assert result[0] == 0.0
         assert result[1] == 256.0  # Y inverted
 
     def test_max_point(self):
         """Test transforming maximum point."""
         point = complex(100.0, 100.0)
-        result = transform_point(point, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg")
-        
+        result = transform_point(
+            point, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg"
+        )
+
         assert result[0] == 256.0
         assert result[1] == 0.0  # Y inverted
 
     def test_with_widget_offset(self):
         """Test point transformation with widget offset."""
         point = complex(0.0, 0.0)
-        result = transform_point(point, (256.0, 256.0), (100.0, 50.0), (100.0, 100.0), "test.svg")
-        
+        result = transform_point(
+            point, (256.0, 256.0), (100.0, 50.0), (100.0, 100.0), "test.svg"
+        )
+
         assert result[0] == 100.0
         assert result[1] == 306.0  # 50 + 256
 
     def test_negative_coordinates(self):
         """Test with negative coordinates."""
         point = complex(-10.0, -10.0)
-        result = transform_point(point, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg")
-        
+        result = transform_point(
+            point, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg"
+        )
+
         assert result[0] == -25.6
         assert result[1] == 281.6
 
@@ -186,20 +195,24 @@ class TestLinePoints:
     def test_basic_line(self):
         """Test converting a basic line."""
         line = Line(start=complex(0, 0), end=complex(100, 100))
-        result = line_points(line, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg")
-        
+        result = line_points(
+            line, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg"
+        )
+
         assert isinstance(result, list)
         assert len(result) == 4  # [x1, y1, x2, y2]
         assert result[0] == 0.0
         assert result[1] == 256.0  # Y inverted
         assert result[2] == 256.0
-        assert result[3] == 0.0    # Y inverted
+        assert result[3] == 0.0  # Y inverted
 
     def test_horizontal_line(self):
         """Test horizontal line transformation."""
         line = Line(start=complex(0, 50), end=complex(100, 50))
-        result = line_points(line, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg")
-        
+        result = line_points(
+            line, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg"
+        )
+
         # Y should be same for both points (horizontal line)
         assert result[1] == result[3]
         assert result[0] == 0.0
@@ -208,8 +221,10 @@ class TestLinePoints:
     def test_vertical_line(self):
         """Test vertical line transformation."""
         line = Line(start=complex(50, 0), end=complex(50, 100))
-        result = line_points(line, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg")
-        
+        result = line_points(
+            line, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg"
+        )
+
         # X should be same for both points (vertical line)
         assert result[0] == result[2]
         assert result[0] == 128.0
@@ -217,8 +232,10 @@ class TestLinePoints:
     def test_short_line(self):
         """Test very short line."""
         line = Line(start=complex(50, 50), end=complex(51, 51))
-        result = line_points(line, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg")
-        
+        result = line_points(
+            line, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg"
+        )
+
         assert len(result) == 4
         # Points should be close but not identical
         assert abs(result[0] - result[2]) < 5
@@ -234,10 +251,12 @@ class TestBezierPoints:
             start=complex(0, 0),
             control1=complex(25, 50),
             control2=complex(75, 50),
-            end=complex(100, 0)
+            end=complex(100, 0),
         )
-        result = bezier_points(bezier, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg")
-        
+        result = bezier_points(
+            bezier, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg"
+        )
+
         assert isinstance(result, list)
         assert len(result) == 8  # [x1, y1, cx1, cy1, cx2, cy2, x2, y2]
 
@@ -247,18 +266,20 @@ class TestBezierPoints:
             start=complex(0, 0),
             control1=complex(33, 33),
             control2=complex(66, 66),
-            end=complex(100, 100)
+            end=complex(100, 100),
         )
-        result = bezier_points(bezier, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg")
-        
+        result = bezier_points(
+            bezier, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg"
+        )
+
         # Start point
         assert result[0] == 0.0
         assert result[1] == 256.0
-        
+
         # Control points should be between start and end
         assert 0.0 < result[2] < 256.0
         assert 0.0 < result[4] < 256.0
-        
+
         # End point
         assert result[6] == 256.0
         assert result[7] == 0.0
@@ -270,10 +291,12 @@ class TestBezierPoints:
             start=complex(0, 0),
             control1=complex(33, 33),
             control2=complex(66, 66),
-            end=complex(100, 100)
+            end=complex(100, 100),
         )
-        result = bezier_points(bezier, (100.0, 100.0), (0.0, 0.0), (100.0, 100.0), "test.svg")
-        
+        result = bezier_points(
+            bezier, (100.0, 100.0), (0.0, 0.0), (100.0, 100.0), "test.svg"
+        )
+
         assert len(result) == 8
 
 
@@ -287,9 +310,9 @@ class TestGetAllPoints:
             control1=(25.0, 50.0),
             control2=(75.0, 50.0),
             end=(100.0, 0.0),
-            segments=40
+            segments=40,
         )
-        
+
         assert isinstance(result, list)
         # 40 segments means 41 points (including t=0), but loop uses <=
         # So it generates 40 points * 2 coords = 80 values
@@ -302,9 +325,9 @@ class TestGetAllPoints:
             control1=(33.0, 33.0),
             control2=(66.0, 66.0),
             end=(100.0, 100.0),
-            segments=10
+            segments=10,
         )
-        
+
         # Should generate points along diagonal
         assert len(result) >= 20  # At least 10 points * 2 coords
 
@@ -315,9 +338,9 @@ class TestGetAllPoints:
             control1=(50.0, 50.0),
             control2=(50.0, 50.0),
             end=(100.0, 100.0),
-            segments=2
+            segments=2,
         )
-        
+
         assert isinstance(result, list)
         assert len(result) >= 4  # At least 2 points
 
@@ -328,9 +351,9 @@ class TestGetAllPoints:
             control1=(25.0, 75.0),
             control2=(75.0, 75.0),
             end=(100.0, 0.0),
-            segments=100
+            segments=100,
         )
-        
+
         # Should generate 100 points * 2 coords = 200 values
         assert len(result) == 200
 
@@ -340,10 +363,10 @@ class TestGetAllPoints:
             start=(0.0, 0.0),
             control1=(50.0, 50.0),
             control2=(50.0, 50.0),
-            end=(100.0, 100.0)
+            end=(100.0, 100.0),
             # segments defaults to 40
         )
-        
+
         # Default 40 segments, generates 40 points * 2 coords = 80 values
         assert len(result) == 80
 
@@ -354,13 +377,13 @@ class TestGetAllPoints:
             control1=(30.0, 40.0),
             control2=(50.0, 60.0),
             end=(70.0, 80.0),
-            segments=10
+            segments=10,
         )
-        
+
         # First point should be start
         assert result[0] == 10.0
         assert result[1] == 20.0
-        
+
         # Last point should be close to end (t=1)
         assert abs(result[-2] - 70.0) < 1.0
         assert abs(result[-1] - 80.0) < 1.0
@@ -372,9 +395,9 @@ class TestGetAllPoints:
             control1=(25.0, 50.0),
             control2=(75.0, 50.0),
             end=(100.0, 0.0),
-            segments=20
+            segments=20,
         )
-        
+
         # 20 segments = 20 points * 2 coords = 40 values
         assert len(result) == 40
 
@@ -442,24 +465,30 @@ class TestIntegration:
         widget_pos = (0.0, 0.0)
         svg_size = (100.0, 100.0)
         svg_file = "test.svg"
-        
+
         result = transform_point(point, widget_size, widget_pos, svg_size, svg_file)
-        
+
         expected_x = transform_x(50.0, 0.0, 256.0, 100.0, svg_file)
         expected_y = transform_y(50.0, 0.0, 256.0, 100.0, svg_file)
-        
+
         assert result[0] == expected_x
         assert result[1] == expected_y
 
     def test_line_points_uses_transform_point(self):
         """Test that line_points uses transform_point correctly."""
         line = Line(start=complex(0, 0), end=complex(100, 100))
-        result = line_points(line, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg")
-        
+        result = line_points(
+            line, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg"
+        )
+
         # Should match individual transform_point calls
-        start_point = transform_point(line.start, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg")
-        end_point = transform_point(line.end, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg")
-        
+        start_point = transform_point(
+            line.start, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg"
+        )
+        end_point = transform_point(
+            line.end, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg"
+        )
+
         assert result[0:2] == start_point
         assert result[2:4] == end_point
 
@@ -469,28 +498,34 @@ class TestIntegration:
             start=complex(0, 0),
             control1=complex(25, 50),
             control2=complex(75, 50),
-            end=complex(100, 0)
+            end=complex(100, 0),
         )
-        result = bezier_points(bezier, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg")
-        
+        result = bezier_points(
+            bezier, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg"
+        )
+
         # Verify it uses transform_point for all 4 points
         assert len(result) == 8
-        
+
         # First two should be transformed start point
-        start_transformed = transform_point(bezier.start, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg")
+        start_transformed = transform_point(
+            bezier.start, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg"
+        )
         assert result[0:2] == start_transformed
 
     def test_consistency_across_functions(self):
         """Test that all transform functions are consistent."""
         x_pos, y_pos = 50.0, 50.0
         point = complex(x_pos, y_pos)
-        
+
         # Direct transform
         x_result = transform_x(x_pos, 0.0, 256.0, 100.0, "test.svg")
         y_result = transform_y(y_pos, 0.0, 256.0, 100.0, "test.svg")
-        
+
         # Via transform_point
-        point_result = transform_point(point, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg")
-        
+        point_result = transform_point(
+            point, (256.0, 256.0), (0.0, 0.0), (100.0, 100.0), "test.svg"
+        )
+
         assert point_result[0] == x_result
         assert point_result[1] == y_result
