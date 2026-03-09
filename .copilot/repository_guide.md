@@ -660,10 +660,51 @@ s2.draw("icon2.svg", animate=True)
 
 ## Testing & Development
 
+### Test Structure
+```
+tests/
+├── __init__.py
+├── conftest.py              # Shared fixtures
+├── unit/                    # Unit tests
+│   ├── __init__.py
+│   ├── test_data_classes.py    # ✅ 8 tests (100% coverage)
+│   ├── test_path_utils.py      # ✅ 47 tests (100% coverage)
+│   └── (more tests in progress)
+├── integration/             # Integration tests
+│   └── __init__.py
+└── fixtures/                # Test data
+    └── sample_data/
+```
+
 ### Running Tests
 ```bash
-pytest
+# Run all tests
+pytest tests/
+
+# Run with coverage
+pytest --cov=kivg tests/
+
+# Run specific test file
+pytest tests/unit/test_path_utils.py
+
+# Run with verbose output
+pytest -v tests/
 ```
+
+### Test Progress
+| Module | Tests | Status | Coverage |
+|--------|-------|--------|----------|
+| data_classes.py | 8 | ✅ Complete | 100% |
+| path_utils.py | 47 | ✅ Complete | 100% |
+| svg_parser.py | - | 📋 Planned | - |
+| mesh_handler.py | - | 📋 Planned | - |
+| svg_renderer.py | - | 📋 Planned | - |
+| main.py | - | 📋 Planned | - |
+
+**Current Total**: 55 tests  
+**Overall Coverage**: ~15% (target: >80%)
+
+See `.copilot/plans/2026-03-08_testing_infrastructure/progress.md` for detailed testing roadmap.
 
 ### Code Formatting
 ```bash

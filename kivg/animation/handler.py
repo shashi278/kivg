@@ -5,7 +5,7 @@ This module provides utilities for combining animations, adding fill effects,
 and managing the animation lifecycle.
 """
 
-from typing import List, Any, Optional, Callable, Dict
+from typing import List, Any, Optional, Callable, Dict, Tuple
 from collections import OrderedDict
 
 from .kivy_animation import Animation

@@ -192,8 +192,8 @@ def find_center(sorted_list: List[float]) -> float:
     Returns:
         The center value or average of the two middle values
     """
-    middle = float(len(sorted_list)) / 2
-    if middle % 2 != 0:
-        return sorted_list[int(middle - 0.5)]
-    else:
-        return (sorted_list[int(middle)] + sorted_list[int(middle - 1)]) / 2
+    n = len(sorted_list)
+    if n % 2 == 1:  # Odd length - return middle element
+        return sorted_list[n // 2]
+    else:  # Even length - return average of two middle elements
+        return (sorted_list[n // 2 - 1] + sorted_list[n // 2]) / 2

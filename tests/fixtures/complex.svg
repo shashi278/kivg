@@ -1,0 +1,8 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <path id="rect" d="M 50 50 L 150 50 L 150 150 L 50 150 Z" 
+        stroke="blue" stroke-width="2" fill="red"/>
+  <path id="curve" d="M 10 10 C 40 40 60 40 90 10" 
+        stroke="green" stroke-width="1" fill="none"/>
+  <path id="arc" d="M 100 100 Q 120 80 140 100" 
+        stroke="orange" fill="yellow"/>
+</svg>
