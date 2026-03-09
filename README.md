@@ -25,6 +25,25 @@ pip install kivg
 
 ## Development & Testing
 
+### Setup Development Environment
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Install pre-commit hooks (one-time setup)
+pre-commit install
+```
+
+### Pre-commit Hooks
+
+The repository uses pre-commit hooks to automatically format code on commit:
+- **Black**: Auto-formats Python code
+- **isort**: Organizes imports
+- **Flake8**: Checks code style
+
+Hooks run automatically on `git commit`. See `.copilot/PRE_COMMIT_GUIDE.md` for details.
+
 ### Running Tests
 ```bash
 # Run all tests
