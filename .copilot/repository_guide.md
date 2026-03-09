@@ -891,9 +891,72 @@ cProfile.run('s.draw("complex.svg", animate=True)')
 
 ---
 
+## Code Quality & Development Tools
+
+### Pre-commit Hooks
+**File**: `.pre-commit-config.yaml`
+
+The repository uses pre-commit hooks to automatically format code on commit. This ensures consistent code quality without manual intervention.
+
+**Tools Configured**:
+1. **Black** (v24.3.0): Code formatter
+   - Line length: 88 characters
+   - Automatically formats Python code
+
+2. **isort** (v5.13.2): Import sorter
+   - Profile: black (compatible with Black)
+   - Organizes imports alphabetically
+
+3. **Flake8** (v7.0.0): Linter
+   - Max line length: 88
+   - Extended ignore: E203 (whitespace before ':')
+   - Checks for code style issues
+
+**Setup** (one-time per environment):
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Install pre-commit hooks
+pre-commit install
+```
+
+**Usage**:
+- Hooks run automatically on `git commit`
+- Code is formatted and checked before commit
+- If changes are made, stage and commit again
+- To run manually: `pre-commit run --all-files`
+- To skip hooks (not recommended): `git commit --no-verify`
+
+**Benefits**:
+- Consistent code formatting across contributors
+- Catches style issues before they reach PR
+- Reduces review time and back-and-forth
+- Maintains high code quality standards
+
+---
+
 ## CI/CD Pipeline
 
-### GitHub Actions Workflow
+### GitHub Actions Workflows
+
+#### Test Workflow
+**File**: `.github/workflows/test.yml`
+
+**Triggers**: 
+- Pull requests to `main` branch
+- Pushes to `main` branch
+
+**Jobs**:
+1. **test**: Run test suite
+   - Setup Python 3.12
+   - Install dependencies
+   - Run pytest with coverage
+   - Check for test failures
+
+**Purpose**: Ensure code changes don't break existing functionality
+
+#### PyPI Publishing Workflow
 **File**: `.github/workflows/python-publish.yml`
 
 **Triggers**: On release published

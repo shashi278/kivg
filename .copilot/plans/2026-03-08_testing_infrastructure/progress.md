@@ -1,8 +1,8 @@
 # Testing Progress
 
 **Status**: 🔄 IN PROGRESS  
-**Progress**: 2/6 utility modules completed (55 tests total)  
-**Coverage**: ~15% (target: >80%)
+**Progress**: 4/6 utility modules completed (116 tests total)  
+**Coverage**: ~55% (target: >80%)
 
 ---
 
@@ -27,25 +27,34 @@
    - Bounding box calculations
    - **Bug fixed**: `find_center()` odd/even detection
 
-**Total Tests Written**: 55
+3. **✅ `svg_parser.py`** (28 tests, 100% coverage)
+   - SVG file parsing and validation
+   - ViewBox extraction (space/comma separated)
+   - Path data extraction with IDs and colors
+   - Multiple paths handling
+   - Empty/invalid path filtering
+   - Color parsing (hex, invalid, default fallback)
+   - Error handling (file not found, invalid XML, missing elements, invalid viewBox)
+   - Edge cases (decimal dimensions, large values, path ordering)
+
+4. **✅ `mesh_handler.py`** (33 tests, 100% coverage)
+   - Tesselator creation and management
+   - Mesh generation from shapes
+   - Vertex and index validation
+   - Shape filtering (minimum point requirements)
+   - Mesh rendering with color and opacity
+   - Widget attribute opacity handling
+   - RGB/RGBA color format handling
+   - Integration with Kivy graphics system
+
+**Total Tests Written**: 116
 
 ---
 
 ## 📋 In Progress / Planned
 
 ### Unit Tests - Remaining Modules
-3. **⏳ `svg_parser.py`** (Next)
-   - SVG file parsing
-   - Path extraction
-   - ViewBox handling
-   - Error handling
-
-4. **📋 `mesh_handler.py`**
-   - Mesh creation
-   - Shape filling
-   - Tessellation
-
-5. **📋 `svg_renderer.py`**
+5. **⏳ `svg_renderer.py`** (Next)
    - Canvas updates
    - Drawing operations
    - Rendering logic
@@ -68,12 +77,12 @@
 |--------|-------|--------|----------|
 | data_classes.py | 8 | ✅ Complete | 100% |
 | path_utils.py | 47 | ✅ Complete | 100% |
-| svg_parser.py | - | ⏳ Next | - |
-| mesh_handler.py | - | 📋 Planned | - |
-| svg_renderer.py | - | 📋 Planned | - |
-| main.py | - | 📋 Planned | - |
-| **TOTAL** | **55** | 🔄 In Progress | ~15% |
+| svg_parser.py | 28 | ✅ Complete | 100% |
+| mesh_handler.py | 33 | ✅ Complete | 100% |
+| svg_renderer.py | - | ⏳ Next | ~40% |
+| main.py | - | 📋 Planned | ~25% |
+| **TOTAL** | **116** | 🔄 In Progress | ~55% |
 
 ---
 
-**Last Updated**: 2026-03-08
+**Last Updated**: 2026-03-09
