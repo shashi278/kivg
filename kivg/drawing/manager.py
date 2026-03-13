@@ -6,15 +6,15 @@ rendering by setting up widget properties for lines and bezier curves.
 """
 
 from collections import OrderedDict
-from typing import List, Tuple, Dict, Any, Optional
+from typing import Any, List, Tuple
 
 from svg.path import parse_path
-from svg.path.path import Line, CubicBezier, Close, Move
+from svg.path.path import Close, CubicBezier, Line, Move
 
 from ..animation.kivy_animation import Animation
-from ..path_utils import get_all_points, bezier_points, line_points
+from ..constants import DEFAULT_ANIMATION_DURATION, DEFAULT_LINE_WIDTH
+from ..path_utils import bezier_points, get_all_points, line_points
 from ..svg_parser import parse_svg
-from ..constants import DEFAULT_LINE_WIDTH, DEFAULT_ANIMATION_DURATION
 
 
 class DrawingManager:
@@ -100,7 +100,7 @@ class DrawingManager:
             closed_shapes: OrderedDict of path data organized by shape ID
             svg_size: SVG dimensions [width, height] from viewBox
             svg_file: Path to the SVG file
-            animate: If True, creates animations for drawing; if False, sets final values
+            animate: If True, creates animations for drawing; if False, sets final values  # noqa: E501
             line_width: Width of the drawn lines in pixels (default: 2)
             duration: Duration for each animation step in seconds (default: 0.02)
 

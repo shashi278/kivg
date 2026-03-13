@@ -57,11 +57,35 @@ pytest tests/unit/test_path_utils.py -v
 ```
 
 ### Test Coverage
-- **Current**: 55 unit tests covering utility modules
+- **Current**: 83 comprehensive unit tests
 - **Status**: 
   - ✅ `data_classes.py` - 8 tests (100% coverage)
   - ✅ `path_utils.py` - 47 tests (100% coverage)
-  - 📋 More modules in progress
+  - ✅ `svg_parser.py` - 28 tests (comprehensive coverage)
+  
+See `.copilot/guides/kivy-testing-research.md` for testing strategy and recommendations.
+
+### Testing the Demo App
+
+The repository includes a demo app that showcases all features:
+
+```bash
+cd demo
+python3 main.py
+```
+
+**What the demo demonstrates**:
+- Grid of 12 SVG icons (Kivy, Python, GitHub, etc.)
+- Click any icon to see path drawing animations
+- Special animations for pie_chart, so (Stack Overflow), and text icons
+- Shape-based animations with custom configurations
+
+The demo verifies:
+- ✅ SVG parsing and rendering
+- ✅ Path drawing animations
+- ✅ Shape animations with custom configs
+- ✅ Multiple SVG files loading correctly
+- ✅ Animation callbacks and transitions
 
 
 ## Usage Guide

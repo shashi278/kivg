@@ -2,14 +2,11 @@
 Unit tests for kivg.svg_parser module.
 """
 
-import os
 import pytest
-from unittest.mock import Mock, patch, mock_open
-from xml.dom import minidom
 
-from kivg.svg_parser import parse_svg
-from kivg.exceptions import SVGParseError, SVGValidationError
 from kivg.constants import DEFAULT_FILL_COLOR
+from kivg.exceptions import SVGParseError, SVGValidationError
+from kivg.svg_parser import parse_svg
 
 
 class TestParseSVG:

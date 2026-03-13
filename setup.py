@@ -1,5 +1,7 @@
+import os
+import re
+
 from setuptools import setup
-import os, re
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -35,7 +37,7 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: Android",
         "Operating System :: Microsoft :: Windows",
-        "Operating System :: OS Independent"
+        "Operating System :: OS Independent",
     ],
     install_requires=["kivy>=2.0.0", "svg.path==4.1"],
     python_requires=">=3.6",

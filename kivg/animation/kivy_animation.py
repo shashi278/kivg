@@ -1,6 +1,6 @@
-# THIS FILE IS TAKEN FROM KIVY OFFICIAL REPOSITORY - ALL RIGHTS RESERVED TO ORIGINAL AUTHORS
+# THIS FILE IS TAKEN FROM KIVY OFFICIAL REPOSITORY - ALL RIGHTS RESERVED TO ORIGINAL AUTHORS  # noqa: E501
 
-# I HAVE ONLY MODIFIED THE FILE TO MAKE IT COMPATIBLE / ENHANCE IT FOR SOME USE CASES WITHIN THE kivg PROJECT
+# I HAVE ONLY MODIFIED THE FILE TO MAKE IT COMPATIBLE / ENHANCE IT FOR SOME USE CASES WITHIN THE kivg PROJECT  # noqa: E501
 
 """
 Animation
@@ -64,11 +64,12 @@ already in place in the animation module.
 
 __all__ = ("Animation", "AnimationTransition")
 
-from math import sqrt, cos, sin, pi
 from collections import ChainMap
-from kivy.event import EventDispatcher
+from math import cos, pi, sin, sqrt
+
 from kivy.clock import Clock
-from kivy.compat import string_types, iterkeys
+from kivy.compat import iterkeys, string_types
+from kivy.event import EventDispatcher
 from kivy.weakproxy import WeakProxy
 
 

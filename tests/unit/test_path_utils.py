@@ -1,17 +1,15 @@
 """Unit tests for path_utils module."""
 
-import pytest
-import math
-from unittest.mock import Mock
-from svg.path.path import Line, CubicBezier
+from svg.path.path import CubicBezier, Line
+
 from kivg.path_utils import (
+    bezier_points,
+    find_center,
+    get_all_points,
+    line_points,
+    transform_point,
     transform_x,
     transform_y,
-    transform_point,
-    bezier_points,
-    line_points,
-    get_all_points,
-    find_center,
 )
 
 

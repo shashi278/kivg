@@ -4,7 +4,7 @@ Handles parsing SVG files and extracting path data.
 """
 
 import os
-from typing import Tuple, List
+from typing import List, Tuple
 from xml.dom import minidom
 
 from kivy.utils import get_color_from_hex
@@ -70,7 +70,7 @@ def parse_svg(svg_file: str) -> Tuple[List[float], List[Tuple[str, str, List[flo
 
         if len(sw_size) != 2 or sw_size[0] <= 0 or sw_size[1] <= 0:
             raise ValueError("Invalid dimensions")
-    except (ValueError, IndexError) as e:
+    except (ValueError, IndexError):
         doc.unlink()
         raise SVGValidationError(
             f"Invalid viewBox format in '{svg_file}': {viewbox_string}"
