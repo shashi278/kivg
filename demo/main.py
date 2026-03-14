@@ -1,6 +1,6 @@
 from kivy.app import App
-from kivy.lang import Builder
 from kivy.clock import mainthread
+from kivy.lang import Builder
 
 from kivg import Kivg
 
@@ -19,7 +19,7 @@ BoxLayout:
             id: svg_area
             size_hint: None, None
             size: 256, 256
-    
+
     GridLayout:
         size_hint_y: None
         height: dp(64)
@@ -30,37 +30,37 @@ BoxLayout:
 
         MYMDIconButton:
             svg_icon: "icons/kivy.svg"
-        
+
         MYMDIconButton:
             svg_icon: "icons/python2.svg"
-        
+
         MYMDIconButton:
             svg_icon: "icons/github3.svg"
-        
+
         MYMDIconButton:
             svg_icon: "icons/github.svg"
-        
+
         MYMDIconButton:
             svg_icon: "icons/sublime.svg"
-        
+
         MYMDIconButton:
             svg_icon: "icons/discord2.svg"
-        
+
         MYMDIconButton:
             svg_icon: "icons/so.svg"
-        
+
         MYMDIconButton:
             svg_icon: "icons/text.svg"
-        
+
         MYMDIconButton:
             svg_icon: "icons/twitter2.svg"
-        
+
         MYMDIconButton:
             svg_icon: "icons/google3.svg"
-        
+
         MYMDIconButton:
             svg_icon: "icons/pie_chart.svg"
-        
+
         MYMDIconButton:
             svg_icon: "icons/facebook2.svg"
 
@@ -68,8 +68,7 @@ BoxLayout:
     size_hint: None, None
     size: dp(48), dp(48)
     on_release:
-        app.animate(self.svg_icon) if (not "so" in self.svg_icon) and (not "pie" in self.svg_icon) and (not "text" in self.svg_icon)\
-            else app.shape_animate(self.svg_icon, self.svg_icon[6:-4]+'_config')
+        app.animate(self.svg_icon) if (not "so" in self.svg_icon) and (not "pie" in self.svg_icon) and (not "text" in self.svg_icon) else app.shape_animate(self.svg_icon, self.svg_icon[6:-4]+'_config')  # noqa: E501
 
 """
 
@@ -99,49 +98,51 @@ class KivgDemo(App):
 
     def animate(self, svg_file):
         self.s.draw(svg_file, animate=True, fill=True, line_width=1)
-    
+
     def shape_animate(self, svg_file, config):
         self.sf = svg_file
         self.con = config
-        pie_chart_config = [
-            {"id_":"neck", "from_":"center_y","d":.45, "t":"out_cubic"},
-            {"id_":"neck-color","d":0},
-            {"id_":"stand", "from_":"center_x", "t":"out_back", "d":.45},
-            {"id_":"stand-color", "d":0},
-            {"id_":"display", "from_":"center_x", "t":"out_bounce","d":.45},
-            {"id_":"display-color","d":0},
-            {"id_":"screen", "from_":"center_y", "t":"out_circ","d":.45},
-            {"id_":"screen-color", "from_":"left","d":.1},
-            {"id_":"bullet1", "from_":"center_x", "d":.2},
-            {"id_":"data1", "from_":"left", "d":.3},
-            {"id_":"bullet2", "from_":"center_x", "d":.2},
-            {"id_":"data2", "from_":"left", "d":.3},
-            {"id_":"bullet3", "from_":"center_x", "d":.2},
-            {"id_":"data3", "from_":"left", "d":.3},
-            {"id_":"pie-full", "from_":"center_y"},
-            {"id_":"pie", "from_":"bottom", "t":"out_bounce", "d":.1},
-            {"id_":"btn1", "from_": "left"},
-            {"id_":"btn2", "from_":"right"},
+        pie_chart_config = [  # noqa: F841
+            {"id_": "neck", "from_": "center_y", "d": 0.45, "t": "out_cubic"},
+            {"id_": "neck-color", "d": 0},
+            {"id_": "stand", "from_": "center_x", "t": "out_back", "d": 0.45},
+            {"id_": "stand-color", "d": 0},
+            {"id_": "display", "from_": "center_x", "t": "out_bounce", "d": 0.45},
+            {"id_": "display-color", "d": 0},
+            {"id_": "screen", "from_": "center_y", "t": "out_circ", "d": 0.45},
+            {"id_": "screen-color", "from_": "left", "d": 0.1},
+            {"id_": "bullet1", "from_": "center_x", "d": 0.2},
+            {"id_": "data1", "from_": "left", "d": 0.3},
+            {"id_": "bullet2", "from_": "center_x", "d": 0.2},
+            {"id_": "data2", "from_": "left", "d": 0.3},
+            {"id_": "bullet3", "from_": "center_x", "d": 0.2},
+            {"id_": "data3", "from_": "left", "d": 0.3},
+            {"id_": "pie-full", "from_": "center_y"},
+            {"id_": "pie", "from_": "bottom", "t": "out_bounce", "d": 0.1},
+            {"id_": "btn1", "from_": "left"},
+            {"id_": "btn2", "from_": "right"},
         ]
 
-        so_config = [
-            {"id_": "base", "from_":"center_y", "t":"out_bounce", "d":.4},
-            {"id_":"line1", "d":.05},
-            {"id_":"line2", "d":.05},
-            {"id_":"line3", "d":.05},
-            {"id_":"line4", "d":.05},
-            {"id_":"line5", "d":.05},
-            {"id_":"line6", "d":.05},
+        so_config = [  # noqa: F841
+            {"id_": "base", "from_": "center_y", "t": "out_bounce", "d": 0.4},
+            {"id_": "line1", "d": 0.05},
+            {"id_": "line2", "d": 0.05},
+            {"id_": "line3", "d": 0.05},
+            {"id_": "line4", "d": 0.05},
+            {"id_": "line5", "d": 0.05},
+            {"id_": "line6", "d": 0.05},
         ]
 
-        text_config = [
-            {"id_":"k","from_":"center_x", "t":"out_back", "d":.4},
-            {"id_":"i","from_":"center_y", "t":"out_bounce", "d":.4},
-            {"id_":"v","from_":"top", "t":"out_quint", "d":.4},
-            {"id_":"y","from_":"bottom", "t":"out_back", "d":.4}
+        text_config = [  # noqa: F841
+            {"id_": "k", "from_": "center_x", "t": "out_back", "d": 0.4},
+            {"id_": "i", "from_": "center_y", "t": "out_bounce", "d": 0.4},
+            {"id_": "v", "from_": "top", "t": "out_quint", "d": 0.4},
+            {"id_": "y", "from_": "bottom", "t": "out_back", "d": 0.4},
         ]
-        self.s.shape_animate(svg_file, anim_config_list=eval(config), on_complete=self.completed)
-    
+        self.s.shape_animate(
+            svg_file, anim_config_list=eval(config), on_complete=self.completed
+        )
+
     def completed(self, *args):
         pass
         # Repeat animation

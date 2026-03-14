@@ -3,10 +3,9 @@ Path utilities for Kivg.
 Contains functions to convert SVG paths to Kivy-compatible coordinates.
 """
 
-from typing import Tuple, List, Callable
-import math
+from typing import List, Tuple
 
-from svg.path.path import Line, CubicBezier
+from svg.path.path import CubicBezier, Line
 
 from .constants import SPECIAL_ICON_KEYWORD, SPECIAL_ICON_SCALE_FACTOR
 
@@ -163,10 +162,10 @@ def line_points(
 
 # Bernstein polynomials for Bezier calculation
 # https://stackoverflow.com/a/15399173/8871954
-B0_t = lambda t: (1 - t) ** 3
-B1_t = lambda t: 3 * t * (1 - t) ** 2
-B2_t = lambda t: 3 * t**2 * (1 - t)
-B3_t = lambda t: t**3
+B0_t = lambda t: (1 - t) ** 3  # noqa: E731
+B1_t = lambda t: 3 * t * (1 - t) ** 2  # noqa: E731
+B2_t = lambda t: 3 * t**2 * (1 - t)  # noqa: E731
+B3_t = lambda t: t**3  # noqa: E731
 
 
 def get_all_points(

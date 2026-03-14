@@ -3,23 +3,22 @@ Kivg - SVG drawing and animation for Kivy
 Core class and main API
 """
 
-import os
 from collections import OrderedDict
-from typing import List, Tuple, Dict, Any, Callable, Optional
+from typing import Any, Callable, Dict, List, Tuple
 
-from kivg.animation.kivy_animation import Animation
-from kivg.drawing.manager import DrawingManager
 from kivg.animation.handler import AnimationHandler
+from kivg.animation.kivy_animation import Animation
+from kivg.constants import (
+    DEFAULT_ANIMATION_DURATION,
+    DEFAULT_LINE_COLOR,
+    DEFAULT_LINE_WIDTH,
+    MESH_OPACITY_PROPERTY,
+    AnimationType,
+)
+from kivg.drawing.manager import DrawingManager
+from kivg.exceptions import WidgetError
 from kivg.mesh_handler import MeshHandler
 from kivg.svg_renderer import SvgRenderer
-from kivg.constants import (
-    DEFAULT_LINE_WIDTH,
-    DEFAULT_LINE_COLOR,
-    DEFAULT_ANIMATION_DURATION,
-    AnimationType,
-    MESH_OPACITY_PROPERTY,
-)
-from kivg.exceptions import WidgetError
 
 
 class Kivg:

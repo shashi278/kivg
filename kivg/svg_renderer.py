@@ -5,10 +5,11 @@ This module handles rendering of SVG path elements (lines, bezier curves)
 to Kivy canvas using dynamically set widget properties.
 """
 
-from typing import List, Any, Union
+from typing import Any, List, Union
 
-from kivy.graphics import Line as KivyLine, Color
-from svg.path.path import Line, CubicBezier, Close, Move
+from kivy.graphics import Color
+from kivy.graphics import Line as KivyLine
+from svg.path.path import CubicBezier, Line
 
 from .path_utils import get_all_points
 

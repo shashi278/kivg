@@ -6,9 +6,9 @@ the codebase to improve maintainability and consistency.
 """
 
 from enum import Enum
-from typing import List, Tuple
+from typing import Tuple
 
-from kivy.graphics.tesselator import WINDING_ODD, TYPE_POLYGONS
+from kivy.graphics.tesselator import TYPE_POLYGONS, WINDING_ODD
 
 
 class AnimationType(Enum):

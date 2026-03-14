@@ -1,7 +1,7 @@
 """Unit tests for data_classes module."""
 
-import pytest
 from unittest.mock import Mock
+
 from kivg.data_classes import AnimationContext
 
 

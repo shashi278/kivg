@@ -33,10 +33,14 @@ tests/
 │   ├── __init__.py
 │   ├── test_data_classes.py    # ✅ 8 tests (100% coverage)
 │   ├── test_path_utils.py      # ✅ 47 tests (100% coverage)
-│   ├── test_svg_parser.py      # 📋 Planned
+│   ├── test_svg_parser.py      # ✅ 28 tests (comprehensive)
 │   ├── test_mesh_handler.py    # 📋 Planned
 │   ├── test_svg_renderer.py    # 📋 Planned
 │   └── test_main.py            # 📋 Planned
+├── widget/                     # 🆕 GraphicUnitTest tests (optional)
+│   ├── __init__.py
+│   ├── test_kivg_widget.py     # 📋 Future
+│   └── test_animation_widget.py # 📋 Future
 ├── integration/
 │   ├── __init__.py
 │   ├── test_drawing_pipeline.py    # 📋 Planned
@@ -46,9 +50,23 @@ tests/
     └── sample_data/
 ```
 
-**Current Test Count**: 55 tests (8 + 47)  
-**Modules Completed**: 2/6 utility modules  
-**Overall Coverage**: ~15% (target: >80%)
+**Current Test Count**: 83 tests (8 + 47 + 28)  
+**Modules Completed**: 3/6 core modules  
+**Overall Coverage**: ~40% (target: >80%)
+
+## Testing Philosophy
+
+### Current Approach: Mock-Based Unit Tests ✅
+- **Primary strategy**: Fast, CI-friendly unit tests
+- **Mock Kivy components**: Avoid GUI dependencies
+- **Focus**: Business logic, parsers, utilities
+- **Status**: Working well, 83 comprehensive tests
+
+### Widget Testing (Future/Optional)
+- **Use GraphicUnitTest** for critical widget behavior only
+- **Requires**: Xvfb for CI, slower execution
+- **Defer until**: Core logic is fully tested
+- See `.copilot/guides/kivy-testing-research.md` for details
 
 ## Test Writing Guidelines
 

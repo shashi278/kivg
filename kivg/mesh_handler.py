@@ -5,12 +5,13 @@ This module provides mesh tesselation and rendering capabilities
 for filling SVG shapes with colors using Kivy's mesh system.
 """
 
-from typing import List, Tuple, Any
+from typing import Any, List, Tuple
 
-from kivy.graphics import Mesh as KivyMesh, Color
-from kivy.graphics.tesselator import Tesselator, WINDING_ODD, TYPE_POLYGONS
+from kivy.graphics import Color
+from kivy.graphics import Mesh as KivyMesh
+from kivy.graphics.tesselator import Tesselator
 
-from .constants import TESSELATION_WINDING, TESSELATION_TYPE
+from .constants import TESSELATION_TYPE, TESSELATION_WINDING
 
 
 class MeshHandler:
@@ -83,7 +84,7 @@ class MeshHandler:
             widget: Kivy widget that contains the canvas to render on
             shapes: List of shapes where each shape is a list of point coordinates
             color: RGB or RGBA color values [r, g, b] or [r, g, b, a]
-            opacity_attr: Name of the widget attribute containing opacity value (0.0-1.0)
+            opacity_attr: Name of the widget attribute containing opacity value (0.0-1.0)  # noqa: E501
 
         Example:
             >>> shapes = [[0, 0, 100, 0, 100, 100, 0, 100]]

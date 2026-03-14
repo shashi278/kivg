@@ -2,12 +2,14 @@
 Shape-specific animation functionality for Kivg.
 """
 
-from kivg.animation.kivy_animation import Animation
-from typing import Dict, List, Tuple, Any, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
+from svg.path.path import CubicBezier, Line
+
+from kivg.animation.kivy_animation import Animation
 from kivg.data_classes import AnimationContext
-from ..path_utils import find_center, line_points, bezier_points
-from svg.path.path import Line, CubicBezier
+
+from ..path_utils import bezier_points, find_center, line_points
 
 
 class ShapeAnimator:
@@ -33,7 +35,7 @@ class ShapeAnimator:
             context: AnimationContext containing:
                     - widget: Widget to animate
                     - shape_id: ID of the shape to animate
-                    - direction: Animation direction (left/right/top/bottom/center_x/center_y/None)
+                    - direction: Animation direction (left/right/top/bottom/center_x/center_y/None)  # noqa: E501
                     - transition: Transition type (e.g., "out_sine", "out_back")
                     - duration: Duration in seconds
                     - closed_shapes: SVG path data
@@ -177,7 +179,7 @@ class ShapeAnimator:
                       "left", "right", "top", "bottom", "center_x", "center_y", None
 
         Returns:
-            Base coordinate value (x or y depending on direction), or None if no direction
+            Base coordinate value (x or y depending on direction), or None if no direction  # noqa: E501
 
         Example:
             >>> path_data = [[[( 10, 20), (50, 60)]]]  # One line

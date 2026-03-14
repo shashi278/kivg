@@ -2,9 +2,9 @@
 Tests for mesh_handler.py - Mesh generation and tesselation.
 """
 
-import pytest
-from unittest.mock import Mock, MagicMock, patch, call
-from kivy.graphics.tesselator import Tesselator, WINDING_ODD, TYPE_POLYGONS
+from unittest.mock import MagicMock, Mock, patch
+
+from kivy.graphics.tesselator import Tesselator
 
 from kivg.mesh_handler import MeshHandler
 
@@ -191,7 +191,7 @@ class TestGenerateMeshes:
         mock_create_tess.return_value = mock_tess
 
         shapes = [[0, 0, 100, 0, 50, 100]]
-        meshes = MeshHandler.generate_meshes(shapes)
+        meshes = MeshHandler.generate_meshes(shapes)  # noqa: F841
 
         mock_create_tess.assert_called_once_with(shapes)
         mock_tess.tesselate.assert_called_once()

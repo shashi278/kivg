@@ -3,6 +3,7 @@ Kivg - SVG drawing and animation for Kivy
 """
 
 from kivy.logger import Logger
+
 from .main import Kivg
 from .version import __version__
 

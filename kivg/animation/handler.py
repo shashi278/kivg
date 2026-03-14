@@ -5,17 +5,15 @@ This module provides utilities for combining animations, adding fill effects,
 and managing the animation lifecycle.
 """
 
-from typing import List, Any, Optional, Callable, Dict, Tuple
 from collections import OrderedDict
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
-from .kivy_animation import Animation
+from ..constants import DEFAULT_FILL_ANIMATION_DURATION
+from ..constants import DEFAULT_SHAPE_ANIM_TRANSITION as DEFAULT_TRANSITION
+from ..constants import MESH_OPACITY_PROPERTY
 from ..data_classes import AnimationContext
 from .animation_shapes import ShapeAnimator
-from ..constants import (
-    DEFAULT_FILL_ANIMATION_DURATION,
-    MESH_OPACITY_PROPERTY,
-    DEFAULT_SHAPE_ANIM_TRANSITION as DEFAULT_TRANSITION,
-)
+from .kivy_animation import Animation
 
 
 class AnimationHandler:
@@ -75,7 +73,7 @@ class AnimationHandler:
         Args:
             anim: Base animation to add fill animation to
             widget: Widget to animate
-            on_progress_callback: Optional callback function for animation progress updates
+            on_progress_callback: Optional callback function for animation progress updates  # noqa: E501
 
         Returns:
             Combined Animation with fill effect added (runs sequentially)
@@ -119,7 +117,7 @@ class AnimationHandler:
             >>> anim = Animation(d=1.0, x=100)
             >>> def on_done(anim, widget):
             ...     print("Animation complete!")
-            >>> AnimationHandler.prepare_and_start_animation(anim, widget, on_complete_callback=on_done)
+            >>> AnimationHandler.prepare_and_start_animation(anim, widget, on_complete_callback=on_done)  # noqa: E501
         """
         anim.cancel_all(widget)
 
